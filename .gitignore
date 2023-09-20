@@ -1,0 +1,7 @@
+.DS_Store
+
+# ignore cmake user file
+CMakeLists.txt.user
+
+# ignore all build folders
+build*
