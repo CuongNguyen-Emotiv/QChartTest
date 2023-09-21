@@ -6,8 +6,8 @@ import QtQuick.Controls
 
 Window {
     id: window
-    width: 750/2
-    height: 1334/2
+    width: Screen.width
+    height: Screen.height
     visible: true
     title: qsTr("Hello World")
 
@@ -26,7 +26,9 @@ Window {
             ComboBox {
                 id: comboboxPointsPerSec
                 model: [128, 256]
+                currentIndex: 1
                 anchors.verticalCenter: textPointsPerSec.verticalCenter
+                width: window.width/2
             }
         }
 
@@ -39,8 +41,9 @@ Window {
 
             ComboBox {
                 id: comboboxChartNumber
-                model: 32
+                model: 65
                 anchors.verticalCenter: textChartNumber.verticalCenter
+                width: window.width/2
             }
         }
 
@@ -52,18 +55,27 @@ Window {
                     repeaterChartView.model = 0
                     repeaterChartView.model = comboboxChartNumber.currentIndex
                 }
+                width: window.width/2
             }
             Button {
                 text: "Stop"
                 onClicked: {
                     ChartViewController.stopDataProducer()
                 }
+                width: window.width/2
             }
         }
 
         Flickable {
             width: parent.width
-            height: window.height/2
+            height: {
+                var tempHeight = 0
+                for (var i = 0; i < parent.children.length - 1; i++) {
+                    tempHeight += parent.children[i].height
+                }
+                return parent.height - tempHeight
+            }
+
             contentWidth: window.width
             contentHeight: chartHeight * repeaterChartView.model
             flickableDirection: Flickable.VerticalFlick
@@ -85,6 +97,12 @@ Window {
                             if (index === repeaterChartView.count - 1) {
                                 ChartViewController.setChartViews(repeaterChartView.chartViews)
                             }
+                        }
+
+                        Text {
+                            text: index + 1
+                            anchors.verticalCenter: parent.verticalCenter
+                            padding: 10
                         }
                     }
                     onModelChanged: chartViews = []

@@ -18,10 +18,6 @@ public:
     Q_INVOKABLE void setChartViews(QList<QQuickItem*> chartViews);
     Q_INVOKABLE void setPointsPerSec(int pointsPerSec);
 
-private slots:
-    void addDataPoint(double x, double y);
-    void updateChartView();
-
 signals:
     void startDataProducer();
     Q_INVOKABLE void stopDataProducer();
@@ -32,10 +28,10 @@ private:
     QLineSeries* createLineSeries();
 
 private:
-    DataProducer m_dataProducer;
     QThread* m_dataProducerThread;
 
     QList<ChartViewCpp*> m_chartViews;
+    QList<DataProducer*> m_dataProducers;
 
 };
 

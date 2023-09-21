@@ -1,4 +1,5 @@
 #include "DataProducer.h"
+#include <QPointF>
 #include <cstdlib>
 
 DataProducer::DataProducer(QObject *parent)
@@ -18,17 +19,30 @@ void DataProducer::start()
     m_timerPointProducer = new QTimer();
     m_timerUpdateChartView = new QTimer();
     connect(m_timerPointProducer, &QTimer::timeout, this, [this](){
-        ++m_count;
-        emit addDataPoint(m_count, (double)rand() / RAND_MAX * 10.0);
+        mNewY.append((double)rand() / RAND_MAX * 10.0);
     });
-    connect(m_timerUpdateChartView, &QTimer::timeout, this, &DataProducer::updateChartView);
+    connect(m_timerUpdateChartView, &QTimer::timeout, this, [this](){
+        int removePoints = mCurrentPoints.count() + mNewY.count() - m_PointsPerSec * DATA_SECS;
+        if (removePoints > 0) {
+            mCurrentPoints.remove(0, removePoints);
+            for (auto& point : mCurrentPoints) {
+                point.setX(point.x() - removePoints);
+            }
+        }
+        for (const auto& y : mNewY) {
+            mCurrentPoints.append(QPointF(mCurrentPoints.count(), y));
+        }
+        mNewY.clear();
+        emit updateChart(mCurrentPoints);
+    });
     m_timerPointProducer->start(1000 / m_PointsPerSec);
     m_timerUpdateChartView->start(1000 / REFRESH_RATE);
 }
 
 void DataProducer::stop()
 {
-    m_count = 0;
+    mCurrentPoints.clear();
+    mNewY.clear();
     if (m_timerPointProducer) {
         m_timerPointProducer->stop();
         delete m_timerPointProducer;

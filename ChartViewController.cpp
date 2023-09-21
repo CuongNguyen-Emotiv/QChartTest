@@ -19,50 +19,52 @@ ChartViewController *ChartViewController::instance()
 
 void ChartViewController::setChartViews(QList<QQuickItem *> chartViews)
 {
+    //clean up
     for (auto& oldChartView : m_chartViews) {
         if (oldChartView) {
             delete oldChartView;
         }
     }
     m_chartViews.clear();
+
+    for (auto& dataProducer : m_dataProducers) {
+        if (dataProducer) {
+            delete dataProducer;
+        }
+    }
+    m_dataProducers.clear();
+
+    //create new
     for (int i = 0; i < chartViews.size(); ++i) {
         ChartViewCpp* chartView = new ChartViewCpp(this);
         chartView->setChartView(chartViews[i]);
         m_chartViews.append(chartView);
+    }
+
+    for (int i = 0; i < chartViews.size(); ++i) {
+        DataProducer* dataProducer = new DataProducer();
+        connect(this, &ChartViewController::startDataProducer, dataProducer, &DataProducer::start);
+        connect(this, &ChartViewController::stopDataProducer, dataProducer, &DataProducer::stop);
+        connect(dataProducer, &DataProducer::updateChart, m_chartViews[i], &ChartViewCpp::updateChart);
+        dataProducer->moveToThread(m_dataProducerThread);
+        m_dataProducers.append(dataProducer);
     }
     emit startDataProducer();
 }
 
 void ChartViewController::setPointsPerSec(int pointsPerSec)
 {
-    m_dataProducer.setPointsPerSec(pointsPerSec);
+    for (auto& dataProducer : m_dataProducers) {
+        dataProducer->setPointsPerSec(pointsPerSec);
+    }
     for (auto& chartView : m_chartViews) {
         chartView->setPointsPerSec(pointsPerSec);
-    }
-}
-
-void ChartViewController::addDataPoint(double x, double y)
-{
-    for (const auto& chartView : m_chartViews) {
-        chartView->addDataPoint(x, y);
-    }
-}
-
-void ChartViewController::updateChartView()
-{
-    for (const auto& chartView : m_chartViews) {
-        chartView->updateChartView();
     }
 }
 
 ChartViewController::ChartViewController(QObject *parent)
     : QObject{parent}
 {
-    connect(this, &ChartViewController::startDataProducer, &m_dataProducer, &DataProducer::start);
-    connect(this, &ChartViewController::stopDataProducer, &m_dataProducer, &DataProducer::stop);
-    connect(&m_dataProducer, &DataProducer::addDataPoint, this, &ChartViewController::addDataPoint);
-    connect(&m_dataProducer, &DataProducer::updateChartView, this, &ChartViewController::updateChartView);
     m_dataProducerThread = new QThread(this);
     m_dataProducerThread->start();
-    m_dataProducer.moveToThread(m_dataProducerThread);
 }

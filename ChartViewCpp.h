@@ -13,9 +13,8 @@ class ChartViewCpp : public QObject
 public:
     explicit ChartViewCpp(QObject *parent = nullptr);
     void setChartView(QQuickItem *chartView);
-    void addDataPoint(double x, double y);
-    void updateChartView();
     void setPointsPerSec(int pointsPerSec);
+    void updateChart(const QList<QPointF>& points);
 
 private:
     QLineSeries* createLineSeries();
@@ -25,7 +24,7 @@ signals:
 private:
     QQuickItem* m_chartView;
     QLineSeries* m_series;
-    QValueAxis* m_axisX;
+    QValueAxis* axisX;
 
     int m_pointsPerSec = DEFAULT_POINTS_PER_SEC;
 };

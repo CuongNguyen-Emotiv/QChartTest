@@ -13,8 +13,7 @@ public:
     void setPointsPerSec(int pointsPerSec);
 
 signals:
-    void addDataPoint(double x, double y);
-    void updateChartView();
+    void updateChart(QList<QPointF> points);
 
 public slots:
     void start();
@@ -23,8 +22,9 @@ public slots:
 private:
     QTimer *m_timerPointProducer = nullptr;
     QTimer *m_timerUpdateChartView = nullptr;
-    unsigned int m_count = 0;
     int m_PointsPerSec = DEFAULT_POINTS_PER_SEC;
+    QList<QPointF> mCurrentPoints;
+    QList<double> mNewY;
 };
 
 #endif // DATAPRODUCER_H

@@ -17,35 +17,25 @@ void ChartViewCpp::setChartView(QQuickItem *chartView)
     m_series = createLineSeries();
 }
 
-void ChartViewCpp::addDataPoint(double x, double y)
-{
-    m_series->append(x, y);
-}
-
-void ChartViewCpp::updateChartView()
-{
-    int count = m_series->count();
-    int max = m_axisX->max();
-    if (count > max) {
-        m_axisX->setMax(count);
-        m_axisX->setMin(count - m_pointsPerSec * DATA_SECS);
-        m_series->removePoints(0, count - max);
-    }
-}
-
 void ChartViewCpp::setPointsPerSec(int pointsPerSec)
 {
     m_pointsPerSec = pointsPerSec;
 }
 
+void ChartViewCpp::updateChart(const QList<QPointF> &points)
+{
+    // replace for the best performance
+    m_series->replace(points);
+}
+
 QLineSeries *ChartViewCpp::createLineSeries()
 {
-    m_axisX = new QValueAxis();
-    m_axisX->setMax(m_pointsPerSec * DATA_SECS);
-    m_axisX->setMin(0);
-    m_axisX->setLabelsVisible(false);
+    axisX = new QValueAxis(this);
+    axisX->setMax(m_pointsPerSec * DATA_SECS);
+    axisX->setMin(0);
+    axisX->setLabelsVisible(false);
 
-    QValueAxis* axisY = new QValueAxis();
+    QValueAxis* axisY = new QValueAxis(this);
     axisY->setMin(0);
     axisY->setMax(axisY->min() + CHART_RANGE);
     axisY->setLabelsVisible(false);
@@ -60,9 +50,15 @@ QLineSeries *ChartViewCpp::createLineSeries()
                               Q_RETURN_ARG(QAbstractSeries *, series),
                               Q_ARG(int, chartType),
                               Q_ARG(QString, ""),
-                              Q_ARG(QAbstractAxis *, m_axisX),
+                              Q_ARG(QAbstractAxis *, axisX),
                               Q_ARG(QAbstractAxis *, axisY));
+
+    // OpenGL is not supported for iOS and MacOS
+#if !defined(Q_OS_IOS) && !defined(Q_OS_MACOS)
     series->setUseOpenGL(true);
+#endif
+
+    connect(this, &QLineSeries::destroyed, series, &QAbstractSeries::deleteLater);
 
     return (QLineSeries*) series;
 }

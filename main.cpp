@@ -23,5 +23,9 @@ int main(int argc, char *argv[])
         }, Qt::QueuedConnection);
     engine.load(url);
 
+#if !defined(Q_OS_IOS) && !defined(Q_OS_ANDROID)
+    engine.rootObjects().first()->setProperty("width", 750/2);
+    engine.rootObjects().first()->setProperty("height", 1334/2);
+#endif
     return app.exec();
 }
