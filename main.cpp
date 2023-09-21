@@ -1,5 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "ChartViewController.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,6 +11,10 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    // This is the line that makes the singleton available to QML
+    qmlRegisterSingletonInstance("Emotiv.ChartViewController", 1, 0, "ChartViewController", ChartViewController::instance());
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
         &app, [url](QObject *obj, const QUrl &objUrl) {

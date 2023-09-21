@@ -25,6 +25,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
 set(PROJECT_SOURCES
         main.cpp
         qml.qrc
+        ChartViewController.h ChartViewController.cpp
+        DataProducer.h DataProducer.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
