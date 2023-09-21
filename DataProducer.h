@@ -3,17 +3,14 @@
 
 #include <QObject>
 #include <QTimer>
-
-static const int DATA_POINTS_PER_SEC = 256;
-static const int DATA_SECS = 5;
-static const int DATA_POINTS = DATA_POINTS_PER_SEC * DATA_SECS;
-static const int REFRESH_RATE = 16;
+#include "Constants.h"
 
 class DataProducer : public QObject
 {
     Q_OBJECT
 public:
     explicit DataProducer(QObject *parent = nullptr);
+    void setPointsPerSec(int pointsPerSec);
 
 signals:
     void addDataPoint(double x, double y);
@@ -27,6 +24,7 @@ private:
     QTimer *m_timerPointProducer = nullptr;
     QTimer *m_timerUpdateChartView = nullptr;
     unsigned int m_count = 0;
+    int m_PointsPerSec = DEFAULT_POINTS_PER_SEC;
 };
 
 #endif // DATAPRODUCER_H

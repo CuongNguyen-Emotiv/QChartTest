@@ -2,11 +2,12 @@
 #define CHARTVIEWCONTROLLER_H
 
 #include "DataProducer.h"
-#include "QtCharts/qvalueaxis.h"
+#include <QValueAxis>
 #include <QObject>
 #include <QQuickItem>
 #include <QLineSeries>
 #include <QThread>
+#include "ChartViewCpp.h"
 
 class ChartViewController : public QObject
 {
@@ -14,7 +15,8 @@ class ChartViewController : public QObject
 public:
     ~ChartViewController();
     static ChartViewController *instance();
-    Q_INVOKABLE void setChartView(QQuickItem *chartView);
+    Q_INVOKABLE void setChartViews(QList<QQuickItem*> chartViews);
+    Q_INVOKABLE void setPointsPerSec(int pointsPerSec);
 
 private slots:
     void addDataPoint(double x, double y);
@@ -22,20 +24,19 @@ private slots:
 
 signals:
     void startDataProducer();
-    void stopDataProducer();
+    Q_INVOKABLE void stopDataProducer();
 
 private:
     explicit ChartViewController(QObject *parent = nullptr);
 
-    QLineSeries* createLineSeries(int index);
+    QLineSeries* createLineSeries();
 
 private:
-    QQuickItem *m_chartView = nullptr;
-    QLineSeries* m_series;
-    QValueAxis* m_axisX;
-
     DataProducer m_dataProducer;
     QThread* m_dataProducerThread;
+
+    QList<ChartViewCpp*> m_chartViews;
+
 };
 
 #endif // CHARTVIEWCONTROLLER_H
