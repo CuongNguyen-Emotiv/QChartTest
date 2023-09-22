@@ -24,7 +24,7 @@ void ChartViewCpp::setPointsPerSec(int pointsPerSec)
 
 void ChartViewCpp::updateChart(const QList<QPointF> &points)
 {
-    // replace for the best performance
+    // replace() for the best performance
     m_series->replace(points);
 }
 
@@ -53,10 +53,8 @@ QLineSeries *ChartViewCpp::createLineSeries()
                               Q_ARG(QAbstractAxis *, axisX),
                               Q_ARG(QAbstractAxis *, axisY));
 
-    // OpenGL is not supported for iOS and MacOS
-#if !defined(Q_OS_IOS) && !defined(Q_OS_MACOS)
+    // for the best perfomance
     series->setUseOpenGL(true);
-#endif
 
     connect(this, &QLineSeries::destroyed, series, &QAbstractSeries::deleteLater);
 
