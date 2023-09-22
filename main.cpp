@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include "ChartViewController.h"
 #include <QQuickWindow>
+#include "FPSText.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
 
     // This is the line that makes the singleton available to QML
     qmlRegisterSingletonInstance("Emotiv.ChartViewController", 1, 0, "ChartViewController", ChartViewController::instance());
+    qmlRegisterType<FPSText>("Emotiv.FPSText", 1, 0, "FPSText");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

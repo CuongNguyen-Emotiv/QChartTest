@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtCharts 2.5
 import Emotiv.ChartViewController 1.0
 import QtQuick.Controls
+import Emotiv.FPSText 1.0
 
 Window {
     id: window
@@ -12,6 +13,12 @@ Window {
     title: qsTr("Hello World")
 
     readonly property int chartHeight: width/2
+
+    FPSText{
+        id: fpsText
+        width: 1
+        height: 1
+    }
 
     Column {
         width: parent.width
@@ -64,6 +71,10 @@ Window {
                 }
                 width: window.width/2
             }
+        }
+
+        Text {
+            text: "FPS: " + fpsText.fps.toFixed(2)
         }
 
         Flickable {
