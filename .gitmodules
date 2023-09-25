@@ -1,0 +1,3 @@
+[submodule "lqtutils"]
+	path = lqtutils
+	url = git@github.com:carlonluca/lqtutils.git

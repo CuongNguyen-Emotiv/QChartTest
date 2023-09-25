@@ -3,7 +3,7 @@
 #include <QQmlContext>
 #include "ChartViewController.h"
 #include <QQuickWindow>
-#include "FPSText.h"
+#include "lqtutils_ui.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +21,6 @@ int main(int argc, char *argv[])
 
     // This is the line that makes the singleton available to QML
     qmlRegisterSingletonInstance("Emotiv.ChartViewController", 1, 0, "ChartViewController", ChartViewController::instance());
-    qmlRegisterType<FPSText>("Emotiv.FPSText", 1, 0, "FPSText");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -30,6 +29,11 @@ int main(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
     engine.load(url);
+
+    auto view = (QQuickWindow*)engine.rootObjects().first();
+    lqt::FrameRateMonitor* monitor = new lqt::FrameRateMonitor(view);
+    engine.rootContext()->setContextProperty("fpsmonitor", monitor);
+    lqt::enableAutoFrameUpdates(*view);
 
 #if !defined(Q_OS_IOS) && !defined(Q_OS_ANDROID)
     engine.rootObjects().first()->setProperty("width", 750/2);

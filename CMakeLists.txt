@@ -27,6 +27,7 @@ set(PROJECT_SOURCES
         qml.qrc
         ChartViewController.h ChartViewController.cpp
         DataProducer.h DataProducer.cpp
+        LineSeries.h LineSeries.cpp
         Constants.h
 )
 
@@ -34,8 +35,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QChart
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        FPSText.h FPSText.cpp
-        LineSeries.h LineSeries.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QChart APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -55,12 +54,16 @@ else()
     endif()
 endif()
 
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/lqtutils/CMakeLists.txt)
+
 target_link_libraries(QChart
   PRIVATE
   Qt${QT_VERSION_MAJOR}::Core
   Qt${QT_VERSION_MAJOR}::Quick
   Qt${QT_VERSION_MAJOR}::Charts
   Qt${QT_VERSION_MAJOR}::Widgets
+  lqtutils
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
