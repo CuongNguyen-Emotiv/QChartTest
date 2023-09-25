@@ -3,13 +3,15 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QLineSeries>
 #include "Constants.h"
 
 class DataProducer : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProducer(QObject *parent = nullptr);
+    explicit DataProducer(double yStartPosition = 0.0, QObject *parent = nullptr);
+    ~DataProducer();
     void setPointsPerSec(int pointsPerSec);
 
 signals:
@@ -25,6 +27,7 @@ private:
     int m_PointsPerSec = DEFAULT_POINTS_PER_SEC;
     QList<QPointF> mCurrentPoints;
     QList<double> mNewY;
+    double m_yStartPosition = 0;
 };
 
 #endif // DATAPRODUCER_H

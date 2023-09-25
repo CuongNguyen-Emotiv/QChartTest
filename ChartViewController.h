@@ -7,7 +7,7 @@
 #include <QQuickItem>
 #include <QLineSeries>
 #include <QThread>
-#include "ChartViewCpp.h"
+#include "LineSeries.h"
 
 class ChartViewController : public QObject
 {
@@ -15,8 +15,8 @@ class ChartViewController : public QObject
 public:
     ~ChartViewController();
     static ChartViewController *instance();
-    Q_INVOKABLE void setChartViews(QList<QQuickItem*> chartViews);
     Q_INVOKABLE void setPointsPerSec(int pointsPerSec);
+    Q_INVOKABLE void createSeries(QQuickItem* chartView, int lineSeriesNumber);
 
 signals:
     void startDataProducer();
@@ -28,11 +28,15 @@ private:
     QLineSeries* createLineSeries();
 
 private:
-    QThread* m_dataProducerThread;
+    QList<QThread*> m_dataProducerThreads;
 
-    QList<ChartViewCpp*> m_chartViews;
     QList<DataProducer*> m_dataProducers;
+    QList<LineSeries*> m_lineSeriesList;
 
+    QValueAxis m_axisX;
+    QValueAxis m_axisY;
+
+    int m_pointPerSec = DEFAULT_POINTS_PER_SEC;
 };
 
 #endif // CHARTVIEWCONTROLLER_H

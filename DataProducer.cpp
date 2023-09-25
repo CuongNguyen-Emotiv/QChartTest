@@ -2,8 +2,13 @@
 #include <QPointF>
 #include <cstdlib>
 
-DataProducer::DataProducer(QObject *parent)
+DataProducer::DataProducer(double yStartPosition, QObject *parent)
     : QObject{parent}
+{
+    m_yStartPosition = yStartPosition;
+}
+
+DataProducer::~DataProducer()
 {
 
 }
@@ -19,7 +24,7 @@ void DataProducer::start()
     m_timerPointProducer = new QTimer();
     m_timerUpdateChartView = new QTimer();
     connect(m_timerPointProducer, &QTimer::timeout, this, [this](){
-        mNewY.append((double)rand() / RAND_MAX * 10.0);
+        mNewY.append((double)rand() / RAND_MAX * 10.0 + m_yStartPosition);
     });
     connect(m_timerUpdateChartView, &QTimer::timeout, this, [this](){
         int removePoints = mCurrentPoints.count() + mNewY.count() - m_PointsPerSec * DATA_SECS;

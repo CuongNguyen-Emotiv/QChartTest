@@ -58,9 +58,9 @@ Window {
             Button {
                 text: "Start"
                 onClicked: {
-                    ChartViewController.setPointsPerSec(comboboxPointsPerSec.currentText)
-                    repeaterChartView.model = 0
-                    repeaterChartView.model = comboboxChartNumber.currentIndex
+                    chartView.removeAllSeries();
+                    ChartViewController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
+                    ChartViewController.createSeries(chartView, comboboxChartNumber.currentIndex)
                 }
                 width: window.width/2
             }
@@ -86,38 +86,15 @@ Window {
                 }
                 return parent.height - tempHeight
             }
-
             contentWidth: window.width
-            contentHeight: chartHeight * repeaterChartView.model
-            flickableDirection: Flickable.VerticalFlick
+            contentHeight: height
             clip: true
-            Column {
-                Repeater {
-                    id: repeaterChartView
-                    property var chartViews: []
-                    model: 1
-                    delegate: ChartView {
-                        id: chartView
-                        width: window.width
-                        height: chartHeight
-                        antialiasing: true
-                        legend.visible: false
-
-                        Component.onCompleted: {
-                            repeaterChartView.chartViews.push(chartView)
-                            if (index === repeaterChartView.count - 1) {
-                                ChartViewController.setChartViews(repeaterChartView.chartViews)
-                            }
-                        }
-
-                        Text {
-                            text: index + 1
-                            anchors.verticalCenter: parent.verticalCenter
-                            padding: 10
-                        }
-                    }
-                    onModelChanged: chartViews = []
-                }
+            ChartView {
+                id: chartView
+                width: window.width
+                height: parent.height
+                antialiasing: true
+                legend.visible: false
             }
         }
     }

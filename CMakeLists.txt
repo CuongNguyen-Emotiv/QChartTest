@@ -27,7 +27,6 @@ set(PROJECT_SOURCES
         qml.qrc
         ChartViewController.h ChartViewController.cpp
         DataProducer.h DataProducer.cpp
-        ChartViewCpp.h ChartViewCpp.cpp
         Constants.h
 )
 
@@ -36,6 +35,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         FPSText.h FPSText.cpp
+        LineSeries.h LineSeries.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QChart APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
