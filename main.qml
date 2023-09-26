@@ -1,12 +1,11 @@
 import QtQuick
 import QtQuick.Window
-import QtCharts 2.5
-import Emotiv.ChartViewController 1.0
 import QtQuick.Controls
+import Emotiv.QcViewController 1.0
+import Emotiv.Constant 1.0
 
 Window {
     id: window
-    objectName: "cuongkjm"
     width: Screen.width
     height: Screen.height
     visible: true
@@ -26,7 +25,7 @@ Window {
 
             ComboBox {
                 id: comboboxPointsPerSec
-                model: [128, 256]
+                model: [Constant.lowPointsPerSec(), Constant.highPointsPerSec()]
                 currentIndex: 1
                 anchors.verticalCenter: textPointsPerSec.verticalCenter
                 width: window.width/2
@@ -42,27 +41,36 @@ Window {
 
             ComboBox {
                 id: comboboxChartNumber
-                model: 65
+                model: Constant.maxChartNumber()
                 anchors.verticalCenter: textChartNumber.verticalCenter
                 width: window.width/2
             }
         }
 
         Row {
+            Text {
+                id: textChartType
+                text: qsTr("Chart type: ")
+                padding: 10
+            }
+
+            ComboBox {
+                id: comboboxChartType
+                model: [Constant.qtChartView(), Constant.qwtView()]
+                anchors.verticalCenter: textChartType.verticalCenter
+                width: window.width/2
+            }
+        }
+
+        Row {
             Button {
+                id: startButton
                 text: "Start"
-                onClicked: {
-                    chartView.removeAllSeries();
-                    ChartViewController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
-                    ChartViewController.createSeries(chartView, comboboxChartNumber.currentIndex)
-                }
                 width: window.width/2
             }
             Button {
+                id: stopButton
                 text: "Stop"
-                onClicked: {
-                    ChartViewController.stopDataProducer()
-                }
                 width: window.width/2
             }
         }
@@ -71,7 +79,8 @@ Window {
             text: "FPS: " + fpsmonitor.freq
         }
 
-        Flickable {
+        Loader {
+            id: chartViewLoader
             width: parent.width
             height: {
                 var tempHeight = 0
@@ -80,15 +89,13 @@ Window {
                 }
                 return parent.height - tempHeight
             }
-            contentWidth: window.width
-            contentHeight: height
             clip: true
-            ChartView {
-                id: chartView
-                width: window.width
-                height: parent.height
-                antialiasing: true
-                legend.visible: false
+            source: {
+                if (comboboxChartType.currentText === Constant.qtChartView()) {
+                    return "qrc:/QtChartView.qml"
+                } else {
+                    return "qrc:/QwtView.qml"
+                }
             }
         }
     }

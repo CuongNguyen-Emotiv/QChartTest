@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>QtChartView.qml</file>
+        <file>QwtView.qml</file>
     </qresource>
 </RCC>

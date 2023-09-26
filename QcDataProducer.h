@@ -1,17 +1,17 @@
-#ifndef DATAPRODUCER_H
-#define DATAPRODUCER_H
+#ifndef QCDATAPRODUCER_H
+#define QCDATAPRODUCER_H
 
 #include <QObject>
 #include <QTimer>
 #include <QLineSeries>
-#include "Constants.h"
+#include "Constant.h"
 
-class DataProducer : public QObject
+class QcDataProducer : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProducer(double yStartPosition = 0.0, QObject *parent = nullptr);
-    ~DataProducer();
+    explicit QcDataProducer(double yStartPosition = 0.0, QObject *parent = nullptr);
+    ~QcDataProducer();
     void setPointsPerSec(int pointsPerSec);
 
 signals:
@@ -24,10 +24,10 @@ public slots:
 private:
     QTimer *m_timerPointProducer = nullptr;
     QTimer *m_timerUpdateChartView = nullptr;
-    int m_PointsPerSec = DEFAULT_POINTS_PER_SEC;
+    int m_PointsPerSec = LOW_POINTS_PER_SEC;
     QList<QPointF> mCurrentPoints;
     QList<double> mNewY;
     double m_yStartPosition = 0;
 };
 
-#endif // DATAPRODUCER_H
+#endif // QCDATAPRODUCER_H

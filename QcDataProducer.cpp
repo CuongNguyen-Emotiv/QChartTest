@@ -1,24 +1,24 @@
-#include "DataProducer.h"
+#include "QcDataProducer.h"
 #include <QPointF>
 #include <cstdlib>
 
-DataProducer::DataProducer(double yStartPosition, QObject *parent)
+QcDataProducer::QcDataProducer(double yStartPosition, QObject *parent)
     : QObject{parent}
 {
     m_yStartPosition = yStartPosition;
 }
 
-DataProducer::~DataProducer()
+QcDataProducer::~QcDataProducer()
 {
 
 }
 
-void DataProducer::setPointsPerSec(int pointsPerSec)
+void QcDataProducer::setPointsPerSec(int pointsPerSec)
 {
     m_PointsPerSec = pointsPerSec;
 }
 
-void DataProducer::start()
+void QcDataProducer::start()
 {
     stop();
     m_timerPointProducer = new QTimer();
@@ -44,7 +44,7 @@ void DataProducer::start()
     m_timerUpdateChartView->start(1000 / REFRESH_RATE);
 }
 
-void DataProducer::stop()
+void QcDataProducer::stop()
 {
     mCurrentPoints.clear();
     mNewY.clear();
