@@ -59,6 +59,7 @@ Window {
                 model: [Constant.qtChartView(), Constant.qwtView()]
                 anchors.verticalCenter: textChartType.verticalCenter
                 width: window.width/2
+                currentIndex: 1
             }
         }
 

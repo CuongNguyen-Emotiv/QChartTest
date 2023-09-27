@@ -16,12 +16,20 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS
     Quick
     Charts
     Widgets
+    Concurrent
+    Gui
+    PrintSupport
+    Svg
 )
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
     Core
     Quick
     Charts
     Widgets
+    Concurrent
+    Gui
+    PrintSupport
+    Svg
 )
 
 set(PROJECT_SOURCES
@@ -31,6 +39,7 @@ set(PROJECT_SOURCES
         QcDataProducer.h QcDataProducer.cpp
         QcLineSeries.h QcLineSeries.cpp
         Constant.h Constant.cpp
+        QcustomPlotItem.h QcustomPlotItem.cpp
         Singleton.h
 )
 
@@ -60,13 +69,43 @@ endif()
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/lqtutils/CMakeLists.txt)
 
+set(LIBS
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Quick
+    Qt${QT_VERSION_MAJOR}::Charts
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Concurrent
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::PrintSupport
+    Qt${QT_VERSION_MAJOR}::Svg
+    lqtutils)
+
+message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    if(${CMAKE_OSX_ARCHITECTURES} MATCHES "x86_64")
+        message(FATAL_ERROR "Please add qwt lib for macos x86_64 architecture here")
+    else()
+        set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/qwt/macos_arm64/lib/libqwt.a)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/qwt/macos_arm64/include)
+    endif()
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "iOS")
+    set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/qwt/ios_arm64/lib/libqwt.a)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/qwt/ios_arm64/include)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Android")
+    message("CMAKE_ANDROID_ARCH_ABI: " ${CMAKE_ANDROID_ARCH_ABI})
+    if (${CMAKE_ANDROID_ARCH_ABI} MATCHES "arm64-v8a")
+        set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/qwt/android_arm64_v8a/lib/libqwt_arm64-v8a.a)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/qwt/android_arm64_v8a/include)
+    else()
+        message(FATAL_ERROR "Please add qwt lib for this compiler")
+    endif()
+else()
+    message(FATAL_ERROR "Please add qwt lib for this compiler")
+endif()
+
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
-  Qt${QT_VERSION_MAJOR}::Core
-  Qt${QT_VERSION_MAJOR}::Quick
-  Qt${QT_VERSION_MAJOR}::Charts
-  Qt${QT_VERSION_MAJOR}::Widgets
-  lqtutils
+  ${LIBS}
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
