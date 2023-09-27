@@ -35,12 +35,19 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
 set(PROJECT_SOURCES
         main.cpp
         qml.qrc
-        QcController.h QcController.cpp
-        QcDataProducer.h QcDataProducer.cpp
-        QcLineSeries.h QcLineSeries.cpp
         Constant.h Constant.cpp
-        QcustomPlotItem.h QcustomPlotItem.cpp
+        Controller.h Controller.cpp
+        DataProducer.h DataProducer.cpp
         Singleton.h
+
+        QChart/QcController.h QChart/QcController.cpp
+        QChart/QcDataProducer.h QChart/QcDataProducer.cpp
+        QChart/QcLineSeries.h QChart/QcLineSeries.cpp
+
+        Qwt/QwtChart.h Qwt/QwtChart.cpp
+        Qwt/QwtController.h Qwt/QwtController.cpp
+        Qwt/QwtLineSeries.h Qwt/QwtLineSeries.cpp
+        Qwt/QwtDataProducer.h Qwt/QwtDataProducer.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -85,23 +92,27 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     if(${CMAKE_OSX_ARCHITECTURES} MATCHES "x86_64")
         message(FATAL_ERROR "Please add qwt lib for macos x86_64 architecture here")
     else()
-        set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/qwt/macos_arm64/lib/libqwt.a)
-        target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/qwt/macos_arm64/include)
+        set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/qwt/macos_arm64/lib/libqwt.a)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/qwt/macos_arm64/include)
     endif()
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "iOS")
-    set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/qwt/ios_arm64/lib/libqwt.a)
-    target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/qwt/ios_arm64/include)
+    set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/qwt/ios_arm64/lib/libqwt.a)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/qwt/ios_arm64/include)
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Android")
     message("CMAKE_ANDROID_ARCH_ABI: " ${CMAKE_ANDROID_ARCH_ABI})
     if (${CMAKE_ANDROID_ARCH_ABI} MATCHES "arm64-v8a")
-        set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/qwt/android_arm64_v8a/lib/libqwt_arm64-v8a.a)
-        target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/qwt/android_arm64_v8a/include)
+        set(LIBS ${LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/qwt/android_arm64_v8a/lib/libqwt_arm64-v8a.a)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/qwt/android_arm64_v8a/include)
     else()
         message(FATAL_ERROR "Please add qwt lib for this compiler")
     endif()
 else()
     message(FATAL_ERROR "Please add qwt lib for this compiler")
 endif()
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/QChart)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Qwt)
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE

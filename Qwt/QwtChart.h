@@ -1,5 +1,5 @@
-#ifndef QCUSTOMPLOTITEM_H
-#define QCUSTOMPLOTITEM_H
+#ifndef QWTCHART_H
+#define QWTCHART_H
 
 #include <QQuickPaintedItem>
 #include <QQuickItem>
@@ -9,15 +9,16 @@
 #include "qwt_symbol.h"
 #include "qwt_plot_renderer.h"
 
-class QcustomPlotItem : public QQuickPaintedItem
+class QwtChart : public QQuickPaintedItem
 {
 public:
-    QcustomPlotItem(QQuickItem *parent = nullptr);
+    QwtChart(QQuickItem *parent = nullptr);
 
     void paint(QPainter *painter) override;
 
+    QwtPlot* qwtPlot();
 private:
     QwtPlot m_plot;
 };
 
-#endif // QCUSTOMPLOTITEM_H
+#endif // QWTCHART_H
