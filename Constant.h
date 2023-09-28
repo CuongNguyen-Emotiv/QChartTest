@@ -11,6 +11,7 @@ static const int REFRESH_RATE = 16;
 static const QString QTCHART_VIEW = "Qt Chart View";
 static const QString QWT_VIEW = "Qwt View";
 static const int MAX_CHART_NUMBER = 65;
+static const int ONE_SEC_MS = 1024;
 
 class Constant : public QObject
 {

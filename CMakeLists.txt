@@ -42,7 +42,6 @@ set(PROJECT_SOURCES
 
         QChart/QcController.h QChart/QcController.cpp
         QChart/QcDataProducer.h QChart/QcDataProducer.cpp
-        QChart/QcLineSeries.h QChart/QcLineSeries.cpp
 
         Qwt/QwtChart.h Qwt/QwtChart.cpp
         Qwt/QwtController.h Qwt/QwtController.cpp

@@ -11,11 +11,11 @@ class QcDataProducer : public DataProducer
 {
     Q_OBJECT
 public:
-    explicit QcDataProducer(double yStartPosition = 0.0, int pointsPerSec = LOW_POINTS_PER_SEC, QObject *parent = nullptr);
+    explicit QcDataProducer(int lineSeriesNumber, double pointsPerSec = LOW_POINTS_PER_SEC, QObject *parent = nullptr);
     ~QcDataProducer();
 
 signals:
-    void updateChart(QList<QPointF> points);
+    void updateChart(QList<QList<QPointF>> pointsList);
 
     // DataProducer interface
 protected slots:
@@ -24,8 +24,8 @@ protected slots:
     virtual void cleanOldData() override;
 
 private:
-    QList<QPointF> mCurrentPoints;
-    QList<double> mNewY;
+    QList<QList<QPointF>> m_currentPointsList;
+    QList<QList<QPointF>> m_newPointsList;
 };
 
 #endif // QCDATAPRODUCER_H

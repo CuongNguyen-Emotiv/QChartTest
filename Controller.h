@@ -14,15 +14,15 @@ public:
     Q_INVOKABLE void setPointsPerSec(int pointsPerSec);
 
 protected:
-    void createDataProducerThreads();
-    void destroyDataProducerThreads();
+    void createDataProducerThread();
+    void destroyDataProducerThread();
 
 signals:
     void startDataProducer();
     Q_INVOKABLE void stopDataProducer();
 
 protected:
-    QList<QThread*> m_dataProducerThreads;
+    QThread* m_dataProducerThread = nullptr;
 
     int m_pointPerSec = LOW_POINTS_PER_SEC;
 };

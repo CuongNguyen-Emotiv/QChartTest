@@ -6,24 +6,27 @@ QcController::~QcController()
 
 }
 
-void QcController::createDataProducers(QList<QAbstractSeries *> lineSeriesList)
+void QcController::createDataProducers(QList<QAbstractSeries *> lineSeriesList, QValueAxis* axisX, QValueAxis* axisY)
 {
+    if (lineSeriesList.empty() || !axisX || !axisY) {
+        return;
+    }
+    m_axisX = axisX;
+    m_axisY = axisY;
     cleanUp();
-    createDataProducerThreads();
+    createDataProducerThread();
+    m_dataProducers = new QcDataProducer(lineSeriesList.count(), m_pointPerSec);
+    connect(m_dataProducers, &QcDataProducer::updateChart, this, &QcController::updateChart);
+    m_dataProducers->moveToThread(m_dataProducerThread);
+    connect(this, &QcController::startDataProducer, m_dataProducers, &QcDataProducer::start);
+    connect(this, &QcController::stopDataProducer, m_dataProducers, &QcDataProducer::stop);
+    connect(this, &QcController::stopDataProducer, m_dataProducers, &QcDataProducer::deleteLater);
 
     for (int i = 0; i < lineSeriesList.count(); ++i) {
-        QLineSeries* series = (QLineSeries*)lineSeriesList[i];
-        series->setUseOpenGL(true);
-        QcDataProducer* dataProducer = new QcDataProducer(i * CHART_RANGE, m_pointPerSec);
-
-        dataProducer->moveToThread(m_dataProducerThreads[i % m_dataProducerThreads.count()]);
-        dataProducer->moveToThread(m_dataProducerThreads[i % m_dataProducerThreads.count()]);
-        connect(this, &QcController::startDataProducer, dataProducer, &QcDataProducer::start);
-        connect(this, &QcController::stopDataProducer, dataProducer, &QcDataProducer::stop);
-        
-        QcLineSeries* lineSeries = new QcLineSeries(dataProducer, series);
+        QLineSeries* lineSeries = (QLineSeries*)lineSeriesList[i];
+        lineSeries->setUseOpenGL(true);
+        lineSeries->setProperty("width", 0.1);
         m_lineSeriesList.append(lineSeries);
-        m_dataProducers.append(dataProducer);
     }
     emit startDataProducer();
 }
@@ -31,11 +34,19 @@ void QcController::createDataProducers(QList<QAbstractSeries *> lineSeriesList)
 void QcController::cleanUp()
 {
     emit stopDataProducer();
-    for (auto& lineSeries : m_lineSeriesList) {
-        delete lineSeries;
-    }
     m_lineSeriesList.clear();
-    m_dataProducers.clear();
+    destroyDataProducerThread();
+}
 
-    destroyDataProducerThreads();
+void QcController::updateChart(QList<QList<QPointF> > pointsList)
+{
+    for (int i = 0; i < pointsList.count(); ++i) {
+        m_lineSeriesList[i]->replace(pointsList[i]);
+    }
+
+    if (pointsList.first().count() < m_pointPerSec*DATA_SECS) {
+        m_axisX->setRange(pointsList.first().first().x(), pointsList.first().first().x() + (double)ONE_SEC_MS/1000 * DATA_SECS);
+    } else {
+        m_axisX->setRange(pointsList.first().first().x(), pointsList.first().last().x());
+    }
 }

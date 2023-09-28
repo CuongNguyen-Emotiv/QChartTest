@@ -40,7 +40,7 @@ ChartView {
                 var lineSeries = chartView.createSeries(ChartView.SeriesTypeLine, "Series " + i, valueAxisX, valueAxisY)
                 seriesList.push(lineSeries)
             }
-            QcViewController.createDataProducers(seriesList)
+            QcViewController.createDataProducers(seriesList, valueAxisX, valueAxisY)
         }
     }
 

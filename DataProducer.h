@@ -10,7 +10,11 @@ class DataProducer : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataProducer(int startYPosition, int pointsPerSec, QObject *parent = nullptr);
+    explicit DataProducer(int lineSeriesNumber, int pointsPerSec, QObject *parent = nullptr);
+
+protected:
+    double randomDouble(double min, double max) const;
+    double getCurrentTime() const;
 
 signals:
 
@@ -24,7 +28,7 @@ protected slots:
     virtual void cleanOldData() = 0;
 
 protected:
-    int m_startYPosition = 0;
+    int m_lineSeriesNumber = 0;
     int m_pointsPerSec = LOW_POINTS_PER_SEC;
 
 private:

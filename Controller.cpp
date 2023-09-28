@@ -11,28 +11,19 @@ void Controller::setPointsPerSec(int pointsPerSec)
     m_pointPerSec = pointsPerSec;
 }
 
-void Controller::createDataProducerThreads()
+void Controller::createDataProducerThread()
 {
-    unsigned int hardwareConcurrency = std::thread::hardware_concurrency();
-    int dataProducerThreadNumber = hardwareConcurrency - 1;
-    if (dataProducerThreadNumber < 1) {
-        dataProducerThreadNumber = 1;
-    }
-    qDebug() << "dataProducerThreadNumber" << dataProducerThreadNumber;
-    for (int i = 0; i < dataProducerThreadNumber; ++i) {
-        QThread* thread = new QThread();
-        thread->start();
-        m_dataProducerThreads.append(thread);
-    }
+    m_dataProducerThread = new QThread();
+    m_dataProducerThread->start();
 }
 
-void Controller::destroyDataProducerThreads()
+void Controller::destroyDataProducerThread()
 {
     emit stopDataProducer();
-    for (auto& thread : m_dataProducerThreads) {
-        thread->quit();
-        thread->wait();
-        delete thread;
+    if (m_dataProducerThread) {
+        m_dataProducerThread->quit();
+        m_dataProducerThread->wait();
+        delete m_dataProducerThread;
+        m_dataProducerThread = nullptr;
     }
-    m_dataProducerThreads.clear();
 }

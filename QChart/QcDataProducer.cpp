@@ -2,10 +2,11 @@
 #include <QPointF>
 #include <cstdlib>
 
-QcDataProducer::QcDataProducer(double yStartPosition, int pointsPerSec, QObject *parent)
-    : DataProducer(yStartPosition, pointsPerSec, parent)
+QcDataProducer::QcDataProducer(int lineSeriesNumber, double pointsPerSec, QObject *parent)
+    : DataProducer(lineSeriesNumber, pointsPerSec, parent)
 {
-
+    m_currentPointsList.resize(m_lineSeriesNumber);
+    m_newPointsList.resize(m_lineSeriesNumber);
 }
 
 QcDataProducer::~QcDataProducer()
@@ -15,28 +16,32 @@ QcDataProducer::~QcDataProducer()
 
 void QcDataProducer::producePoints()
 {
-    mNewY.append((double)rand() / RAND_MAX * 10.0 + m_startYPosition);
+    double currentTime = getCurrentTime();
+    for (int i = 0; i < m_lineSeriesNumber; ++i) {
+        m_newPointsList[i].append(QPointF(currentTime, randomDouble(i*CHART_RANGE, (i+1)*CHART_RANGE)));
+    }
 }
 
 void QcDataProducer::updateChartView()
 {
-    int removePoints = mCurrentPoints.count() + mNewY.count() - m_pointsPerSec * DATA_SECS;
+    int removePoints = m_currentPointsList[0].count() + m_newPointsList[0].count() - m_pointsPerSec * DATA_SECS;
     if (removePoints > 0) {
-        mCurrentPoints.remove(0, removePoints);
-        for (auto& point : mCurrentPoints) {
-            point.setX(point.x() - removePoints);
+        for (auto& currentPoints : m_currentPointsList) {
+            currentPoints.remove(0, removePoints);
         }
     }
-    for (const auto& y : mNewY) {
-        mCurrentPoints.append(QPointF(mCurrentPoints.count(), y));
+    for (int i = 0; i < m_currentPointsList.count(); ++i) {
+        m_currentPointsList[i].append(m_newPointsList[i]);
+        m_newPointsList[i].clear();
     }
-    mNewY.clear();
-    emit updateChart(mCurrentPoints);
+    emit updateChart(m_currentPointsList);
 }
 
 
 void QcDataProducer::cleanOldData()
 {
-    mCurrentPoints.clear();
-    mNewY.clear();
+    m_currentPointsList.clear();
+    m_newPointsList.clear();
+    m_currentPointsList.resize(m_lineSeriesNumber);
+    m_newPointsList.resize(m_lineSeriesNumber);
 }
