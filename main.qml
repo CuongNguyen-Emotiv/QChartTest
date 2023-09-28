@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import Emotiv.QcViewController 1.0
 import Emotiv.Constant 1.0
 
 Window {

@@ -45,7 +45,7 @@ set(PROJECT_SOURCES
 
         Qwt/QwtChart.h Qwt/QwtChart.cpp
         Qwt/QwtController.h Qwt/QwtController.cpp
-        Qwt/QwtLineSeries.h Qwt/QwtLineSeries.cpp
+
         Qwt/QwtDataProducer.h Qwt/QwtDataProducer.cpp
 )
 

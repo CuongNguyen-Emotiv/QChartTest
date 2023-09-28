@@ -1,6 +1,6 @@
 import QtQuick
 import QtCharts 2.5
-import Emotiv.QcViewController 1.0
+import Emotiv.QcController 1.0
 
 ChartView {
     id: chartView
@@ -28,7 +28,7 @@ ChartView {
         target: startButton
         function onClicked() {
             chartView.removeAllSeries();
-            QcViewController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
+            QcController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
 
             valueAxisX.min = 0
             valueAxisX.max = comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex) * dataSecs
@@ -40,18 +40,18 @@ ChartView {
                 var lineSeries = chartView.createSeries(ChartView.SeriesTypeLine, "Series " + i, valueAxisX, valueAxisY)
                 seriesList.push(lineSeries)
             }
-            QcViewController.createDataProducers(seriesList, valueAxisX, valueAxisY)
+            QcController.createDataProducers(seriesList, valueAxisX, valueAxisY)
         }
     }
 
     Connections {
         target: stopButton
         function onClicked() {
-            QcViewController.stopDataProducer()
+            QcController.stopDataProducer()
         }
     }
 
     Component.onDestruction: {
-        QcViewController.cleanUp();
+        QcController.cleanUp();
     }
 }

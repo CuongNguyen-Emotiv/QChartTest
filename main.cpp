@@ -6,6 +6,7 @@
 #include <QQuickWindow>
 #include "lqtutils_ui.h"
 #include "QwtChart.h"
+#include "QwtController.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,8 +23,9 @@ int main(int argc, char *argv[])
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
 
     // This is the line that makes the singleton available to QML
-    qmlRegisterSingletonInstance("Emotiv.QcViewController", 1, 0, "QcViewController", Singleton<QcController>::instance());
+    qmlRegisterSingletonInstance("Emotiv.QcController", 1, 0, "QcController", Singleton<QcController>::instance());
     qmlRegisterSingletonInstance("Emotiv.Constant", 1, 0, "Constant", Singleton<Constant>::instance());
+    qmlRegisterSingletonInstance("Emotiv.QwtController", 1, 0, "QwtController", Singleton<QwtController>::instance());
     qmlRegisterType<QwtChart>("Emotiv.QwtChart", 1, 0, "QwtChart");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
