@@ -1,4 +1,5 @@
 #include "QwtChart.h"
+#include "Constant.h"
 
 QwtChart::QwtChart(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
@@ -20,4 +21,20 @@ void QwtChart::paint(QPainter *painter)
 QwtPlot *QwtChart::plot()
 {
     return &m_plot;
+}
+
+int QwtChart::curveNumber() const
+{
+    return m_curveNumber;
+}
+
+void QwtChart::setCurveNumber(int newCurveNumber)
+{
+    if (newCurveNumber > 0) {
+        m_plot.setAxisScale(QwtPlot::yLeft, 0, newCurveNumber * CHART_RANGE);
+    }
+    if (m_curveNumber != newCurveNumber) {
+        m_curveNumber = newCurveNumber;
+        emit curveNumberChanged();
+    }
 }

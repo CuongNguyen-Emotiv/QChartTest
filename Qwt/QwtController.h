@@ -9,11 +9,12 @@ class QwtController : public Controller
 {
     Q_OBJECT
 public:
-    virtual ~QwtController();
+    virtual ~QwtController() = default;
     Q_INVOKABLE void createDataProducers(QwtChart* qwtChart, int numberOfLineSeries);
 
 private:
     int randomInt(int low, int high);
+    void cleanUp();
 
 private slots:
     void updateChart(QList<QVector<double>> xDataList, QList<QVector<double>> yDataList);

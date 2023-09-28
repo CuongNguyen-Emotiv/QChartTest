@@ -10,6 +10,7 @@ Item {
         id: qwtChart
         width: parent.width
         height: parent.height
+        curveNumber: comboboxChartNumber.currentIndex
     }
 
     QwtController {

@@ -2,16 +2,11 @@
 #include "QwtDataProducer.h"
 #include <random>
 
-QwtController::~QwtController()
-{
-    m_lineSeriesList.clear();
-}
-
 void QwtController::createDataProducers(QwtChart *qwtChart, int numberOfLineSeries)
 {
     if (qwtChart == nullptr || numberOfLineSeries <= 0)
         return;
-    m_lineSeriesList.clear();
+    cleanUp();
     createDataProducerThread();
     m_qwtChart = qwtChart;
     m_dataProducer = new QwtDataProducer(numberOfLineSeries, m_pointPerSec);
@@ -41,11 +36,29 @@ int QwtController::randomInt(int low, int high)
     return dist(gen);
 }
 
+void QwtController::cleanUp()
+{
+    for (auto& lineSeries : m_lineSeriesList)
+    {
+        lineSeries->detach();
+        delete lineSeries;
+    }
+    m_lineSeriesList.clear();
+}
+
 void QwtController::updateChart(QList<QVector<double> > xDataList, QList<QVector<double> > yDataList)
 {
     for (int i = 0; i < xDataList.count(); ++i)
     {
         m_lineSeriesList[i]->setSamples(xDataList[i], yDataList[i]);
+    }
+    double minX = xDataList[0].first();
+    double maxX = xDataList[0].last();
+    if (xDataList[0].size() < DATA_SECS * m_pointPerSec) {
+        m_qwtChart->plot()->setAxisScale(QwtPlot::xBottom, minX, minX + (double)ONE_SEC_MS/1000 * DATA_SECS);
+    }
+    else {
+        m_qwtChart->plot()->setAxisScale(QwtPlot::xBottom, minX, maxX);
     }
     m_qwtChart->plot()->replot();
     m_qwtChart->update();
