@@ -16,7 +16,7 @@ public:
 
     void paint(QPainter *painter) override;
 
-    QwtPlot* qwtPlot();
+    QwtPlot* plot();
 private:
     QwtPlot m_plot;
 };

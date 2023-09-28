@@ -14,10 +14,10 @@ class QcController : public Controller
 public:
     ~QcController();
     Q_INVOKABLE void createDataProducers(QList<QAbstractSeries*> lineSeriesList, QValueAxis* axisX, QValueAxis* axisY);
-    Q_INVOKABLE void cleanUp();
 
 private:
     void updateChart(QList<QList<QPointF>> pointsList);
+    void cleanUp();
 
 private:
     QcDataProducer* m_dataProducers;

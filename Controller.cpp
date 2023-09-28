@@ -6,6 +6,11 @@ Controller::Controller(QObject *parent)
 
 }
 
+Controller::~Controller()
+{
+    destroyDataProducerThread();
+}
+
 void Controller::setPointsPerSec(int pointsPerSec)
 {
     m_pointPerSec = pointsPerSec;
@@ -13,6 +18,7 @@ void Controller::setPointsPerSec(int pointsPerSec)
 
 void Controller::createDataProducerThread()
 {
+    destroyDataProducerThread();
     m_dataProducerThread = new QThread();
     m_dataProducerThread->start();
 }

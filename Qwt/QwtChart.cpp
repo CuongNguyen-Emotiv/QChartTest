@@ -4,7 +4,6 @@ QwtChart::QwtChart(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
     m_plot.setTitle("");
     m_plot.setCanvasBackground(Qt::white);
-    m_plot.setAutoReplot();
     m_plot.setAxisVisible(QwtPlot::xBottom, false);
     m_plot.setAxisVisible(QwtPlot::yLeft, false);
 }
@@ -18,7 +17,7 @@ void QwtChart::paint(QPainter *painter)
     renderer.render(&m_plot, painter, rect.toRect());
 }
 
-QwtPlot *QwtChart::qwtPlot()
+QwtPlot *QwtChart::plot()
 {
     return &m_plot;
 }

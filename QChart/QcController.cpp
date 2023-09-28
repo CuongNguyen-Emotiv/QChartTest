@@ -3,7 +3,7 @@
 
 QcController::~QcController()
 {
-
+    m_lineSeriesList.clear();
 }
 
 void QcController::createDataProducers(QList<QAbstractSeries *> lineSeriesList, QValueAxis* axisX, QValueAxis* axisY)

@@ -23,10 +23,10 @@ int main(int argc, char *argv[])
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
 
     // This is the line that makes the singleton available to QML
-    qmlRegisterSingletonInstance("Emotiv.QcController", 1, 0, "QcController", Singleton<QcController>::instance());
-    qmlRegisterSingletonInstance("Emotiv.Constant", 1, 0, "Constant", Singleton<Constant>::instance());
-    qmlRegisterSingletonInstance("Emotiv.QwtController", 1, 0, "QwtController", Singleton<QwtController>::instance());
+    qmlRegisterType<QcController>("Emotiv.QcController", 1, 0, "QcController");
+    qmlRegisterType<QwtController>("Emotiv.QwtController", 1, 0, "QwtController");
     qmlRegisterType<QwtChart>("Emotiv.QwtChart", 1, 0, "QwtChart");
+    qmlRegisterSingletonInstance("Emotiv.Constant", 1, 0, "Constant", Singleton<Constant>::instance());
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

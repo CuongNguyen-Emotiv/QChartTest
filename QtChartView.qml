@@ -24,11 +24,15 @@ ChartView {
         gridVisible: false
     }
 
+    QcController {
+        id: qcController
+    }
+
     Connections {
         target: startButton
         function onClicked() {
             chartView.removeAllSeries();
-            QcController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
+            qcController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
 
             valueAxisX.min = 0
             valueAxisX.max = comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex) * dataSecs
@@ -40,18 +44,14 @@ ChartView {
                 var lineSeries = chartView.createSeries(ChartView.SeriesTypeLine, "Series " + i, valueAxisX, valueAxisY)
                 seriesList.push(lineSeries)
             }
-            QcController.createDataProducers(seriesList, valueAxisX, valueAxisY)
+            qcController.createDataProducers(seriesList, valueAxisX, valueAxisY)
         }
     }
 
     Connections {
         target: stopButton
         function onClicked() {
-            QcController.stopDataProducer()
+            qcController.stopDataProducer()
         }
-    }
-
-    Component.onDestruction: {
-        QcController.cleanUp();
     }
 }

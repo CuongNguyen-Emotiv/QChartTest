@@ -12,11 +12,15 @@ Item {
         height: parent.height
     }
 
+    QwtController {
+        id: qwtController
+    }
+
     Connections {
         target: startButton
         function onClicked() {
-            QwtController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
-            QwtController.createDataProducers(qwtChart, comboboxChartNumber.currentIndex)
+            qwtController.setPointsPerSec(comboboxPointsPerSec.textAt(comboboxPointsPerSec.currentIndex))
+            qwtController.createDataProducers(qwtChart, comboboxChartNumber.currentIndex)
         }
     }
 }

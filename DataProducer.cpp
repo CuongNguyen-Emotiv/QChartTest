@@ -34,7 +34,6 @@ void DataProducer::start()
 
     m_timerPointProducer->start(ONE_SEC_MS / m_pointsPerSec);
     m_timerUpdateChartView->start(ONE_SEC_MS / REFRESH_RATE);
-    qDebug() << "start";
 }
 
 void DataProducer::stop()

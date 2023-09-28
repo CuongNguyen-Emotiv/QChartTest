@@ -11,6 +11,7 @@ class Controller : public QObject
     Q_OBJECT
 public:
     explicit Controller(QObject *parent = nullptr);
+    virtual ~Controller();
     Q_INVOKABLE void setPointsPerSec(int pointsPerSec);
 
 protected:
