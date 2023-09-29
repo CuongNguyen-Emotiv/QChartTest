@@ -35,6 +35,11 @@ QString Constant::qwtView()
     return QWT_VIEW;
 }
 
+QString Constant::proView()
+{
+    return PRO_VIEW;
+}
+
 int Constant::maxChartNumber()
 {
     return MAX_CHART_NUMBER;

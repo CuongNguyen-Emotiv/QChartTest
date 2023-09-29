@@ -45,8 +45,11 @@ set(PROJECT_SOURCES
 
         Qwt/QwtChart.h Qwt/QwtChart.cpp
         Qwt/QwtController.h Qwt/QwtController.cpp
-
         Qwt/QwtDataProducer.h Qwt/QwtDataProducer.cpp
+
+        Pro/QuickQwtPlot.h Pro/QuickQwtPlot.cpp
+        Pro/QuickCurve.h Pro/QuickCurve.cpp
+        Pro/ProDataProceducer.h Pro/ProDataProceducer.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -112,6 +115,7 @@ endif()
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/QChart)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Qwt)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Pro)
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE

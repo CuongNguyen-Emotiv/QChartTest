@@ -55,7 +55,7 @@ Window {
 
             ComboBox {
                 id: comboboxChartType
-                model: [Constant.qtChartView(), Constant.qwtView()]
+                model: [Constant.qtChartView(), Constant.qwtView(), Constant.proView()]
                 anchors.verticalCenter: textChartType.verticalCenter
                 width: window.width/2
                 currentIndex: 1
@@ -93,7 +93,11 @@ Window {
             source: {
                 if (comboboxChartType.currentText === Constant.qtChartView()) {
                     return "qrc:/QtChartView.qml"
-                } else {
+                }
+                else if (comboboxChartType.currentText === Constant.proView()) {
+                    return "qrc:/ProView.qml"
+                }
+                else {
                     return "qrc:/QwtView.qml"
                 }
             }

@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>QtChartView.qml</file>
         <file>QwtView.qml</file>
+        <file>ProView.qml</file>
     </qresource>
 </RCC>

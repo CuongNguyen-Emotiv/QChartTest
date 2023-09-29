@@ -10,6 +10,7 @@ static const int DATA_SECS = 5;
 static const int REFRESH_RATE = 16;
 static const QString QTCHART_VIEW = "Qt Chart View";
 static const QString QWT_VIEW = "Qwt View";
+static const QString PRO_VIEW = "Pro View";
 static const int MAX_CHART_NUMBER = 65;
 static const int ONE_SEC_MS = 1024;
 
@@ -25,6 +26,7 @@ public:
     Q_INVOKABLE int refreshRate();
     Q_INVOKABLE QString qtChartView();
     Q_INVOKABLE QString qwtView();
+    Q_INVOKABLE QString proView();
     Q_INVOKABLE int maxChartNumber();
 };
 

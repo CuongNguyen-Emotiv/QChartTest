@@ -1,6 +1,8 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include "QuickCurve.h"
+#include "QuickQwtPlot.h"
 #include "Singleton.h"
 #include "QcController.h"
 #include <QQuickWindow>
@@ -26,6 +28,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<QcController>("Emotiv.QcController", 1, 0, "QcController");
     qmlRegisterType<QwtController>("Emotiv.QwtController", 1, 0, "QwtController");
     qmlRegisterType<QwtChart>("Emotiv.QwtChart", 1, 0, "QwtChart");
+
+    qmlRegisterType<QuickQwtPlot>("Emotiv.QuickQwtPlot", 1, 0, "QuickQwtPlot");
+    qmlRegisterType<QuickCurve>("Emotiv.QuickCurve", 1, 0, "QuickCurve");
+
     qmlRegisterSingletonInstance("Emotiv.Constant", 1, 0, "Constant", Singleton<Constant>::instance());
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
