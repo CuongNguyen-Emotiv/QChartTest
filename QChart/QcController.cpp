@@ -25,7 +25,7 @@ void QcController::createDataProducers(QList<QAbstractSeries *> lineSeriesList, 
     for (int i = 0; i < lineSeriesList.count(); ++i) {
         QLineSeries* lineSeries = (QLineSeries*)lineSeriesList[i];
         lineSeries->setUseOpenGL(true);
-        lineSeries->setProperty("width", 0.1);
+        lineSeries->setProperty("width", 1);
         m_lineSeriesList.append(lineSeries);
     }
     emit startDataProducer();
